@@ -1,8 +1,8 @@
 package main
 
-import "joinapi/session"
+import "joinapi/event"
 
 func main() {
-	service := session.NewService(session.MemoryDataSink{})
-	service.Create(session.Session{Name: "Heilgenhafen"})
+	service := event.NewService(&event.MemoryRepository{})
+	service.Create(event.Event{Name: "Heilgenhafen"})
 }
