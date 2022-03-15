@@ -1,8 +1,12 @@
 package main
 
-import "joinapi/event"
+import (
+	"joinapi/adapter"
+	"joinapi/core/domain"
+	"joinapi/core/services"
+)
 
 func main() {
-	service := event.NewService(&event.MemoryRepository{})
-	service.Create(event.Event{Name: "Heilgenhafen"})
+	service := services.NewEventService(adapter.NewMemoryRepository())
+	service.Create(domain.Event{Name: "Heilgenhafen"})
 }
