@@ -1,9 +1,9 @@
 package services
 
 import (
+	"eventbook/adapter"
+	"eventbook/core/domain"
 	"github.com/stretchr/testify/assert"
-	"joinapi/adapter"
-	"joinapi/core/domain"
 	"testing"
 )
 

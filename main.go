@@ -1,12 +1,19 @@
 package main
 
 import (
-	"joinapi/adapter"
-	"joinapi/core/domain"
-	"joinapi/core/services"
+	"eventbook/adapter"
+	"eventbook/core/domain"
+	"eventbook/core/services"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
 func main() {
 	service := services.NewEventService(adapter.NewMemoryRepository())
-	service.Create(domain.Event{Name: "Heilgenhafen"})
+	service.Create(domain.Event{Name: "Wingding Heiligenhafen"})
+	httpAdapter := adapter.NewHTTPHandler(service)
+	router := mux.NewRouter()
+	router.HandleFunc("/events", httpAdapter.GetAllEvents())
+	log.Fatal(http.ListenAndServe(":8000", router))
 }

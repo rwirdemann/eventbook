@@ -1,8 +1,8 @@
 package services
 
 import (
-	"joinapi/core/domain"
-	"joinapi/core/ports"
+	"eventbook/core/domain"
+	"eventbook/core/ports"
 )
 
 type EventService struct {

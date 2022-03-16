@@ -1,6 +1,6 @@
 package adapter
 
-import "joinapi/core/domain"
+import "eventbook/core/domain"
 
 type MemoryEventRepository struct {
 	sessions map[int]domain.Event

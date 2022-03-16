@@ -1,7 +1,7 @@
 package ports
 
 import (
-	"joinapi/core/domain"
+	"eventbook/core/domain"
 )
 
 type EventRepository interface {
