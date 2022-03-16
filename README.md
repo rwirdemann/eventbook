@@ -8,12 +8,32 @@ Eventbook is a REST API for event managment. Events can be of any kind, e.g. spo
 
 ## API
 
-```
-GET  /{organizer}/events
-GET  /{organizer}/{id}
-POST /{organizer}/events
+### Authentication
 
-GET    /events/{id}/members
-POST   /events/{id}/members
-DELETE /events/{id}/members/{memberId}
+```
+./keycloak-login.sh localhost:8080 wingding ralf wingdingclient n
+```
+
+### Realms
+
+```
+GET    /admin/{realms}
+POST   /admin/{realms}
+DELETE /admin/{realms}/{id}
+```
+
+### Events
+
+```
+GET    /{realm}/events
+GET    /{realm}/events/{id}
+POST   /{realm}/events
+```
+
+### Membership
+
+```
+GET    /{realm}/events/{id}/members
+POST   /{realm}/events/{id}/members/{memberId}
+DELETE /{realm}/events/{id}/members/{memberId}
 ```
