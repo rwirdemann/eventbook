@@ -17,9 +17,9 @@ Eventbook is a REST API for event managment. Events can be of any kind, e.g. spo
 ### Realms
 
 ```
-GET    /admin/{realms}
-POST   /admin/{realms}
-DELETE /admin/{realms}/{id}
+GET    /admin/realms
+POST   /admin/realms/
+DELETE /admin/realms/{id}
 ```
 
 ### Events
