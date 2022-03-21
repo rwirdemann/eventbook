@@ -1,14 +1,14 @@
 package services
 
 import (
-	"eventbook/adapter"
+	"eventbook/adapter/memory"
 	"eventbook/core/domain"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestCreateEvent(t *testing.T) {
-	eventRepository := adapter.NewMemoryRepository()
+	eventRepository := memory.NewEventRepository()
 	service := NewEventService(eventRepository)
 	event := service.Create(domain.Event{Name: "Heiligenhafen"})
 	events := eventRepository.All()
