@@ -1,11 +1,13 @@
 package cdt
 
 import (
+	"bytes"
 	"encoding/json"
+	"eventbook/core/domain"
 	"fmt"
 	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/assert"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -22,6 +24,33 @@ func init() {
 
 func TestGetAllRealms(t *testing.T) {
 	jwt := login()
+	realms := getAllRealms(t, jwt)
+	len := len(realms)
+	println("LEN", len)
+
+	realm := domain.Realm{
+		Name: "runbuddies",
+	}
+	jsonData, err := json.Marshal(realm)
+	if err != nil {
+		log.Fatal(err)
+	}
+	request, error := http.NewRequest("POST", "http://localhost:8000/admin/realms", bytes.NewBuffer(jsonData))
+	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	request.Header.Set("Authorization", "Bearer "+jwt)
+
+	client := &http.Client{}
+	response, error := client.Do(request)
+	if error != nil {
+		panic(error)
+	}
+	defer response.Body.Close()
+
+	fmt.Println("response Status:", response.Status)
+	fmt.Println("response Headers:", response.Header)
+}
+
+func getAllRealms(t *testing.T, jwt string) []domain.Realm {
 	c := http.Client{}
 	req, err := http.NewRequest("GET", "http://localhost:8000/admin/realms", nil)
 	if err != nil {
@@ -38,8 +67,14 @@ func TestGetAllRealms(t *testing.T) {
 			log.Fatal(err)
 		}
 	}(resp.Body)
-	body, err := ioutil.ReadAll(resp.Body)
-	fmt.Printf("Body : %s", body)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	var realms []domain.Realm
+	err = json.NewDecoder(resp.Body).Decode(&realms)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return realms
 }
 
 func login() string {
@@ -54,10 +89,11 @@ func login() string {
 		log.Fatal(err)
 	}
 
-	var res map[string]string
+	var res map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return res["access_token"]
+	accessToken := fmt.Sprintf("%v", res["access_token"])
+	return accessToken
 }

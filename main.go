@@ -1,8 +1,8 @@
 package main
 
 import (
-	"eventbook/adapter"
 	"eventbook/adapter/memory"
+	"eventbook/adapter/rest"
 	"eventbook/core/domain"
 	"eventbook/core/services"
 	"github.com/gorilla/mux"
@@ -18,15 +18,17 @@ func main() {
 	}
 
 	eventService := services.NewEventService(memory.NewEventRepository())
-	eventService.Create(domain.Event{Name: "Wingding Heiligenhafen"})
 
 	realmService := services.NewRealmService(memory.NewRealmRepository())
 	realmService.Create(domain.Realm{Name: "Wingbuddies"})
 	realmService.Create(domain.Realm{Name: "Bikebuddies"})
 
-	httpAdapter := adapter.NewHTTPHandler(eventService, realmService)
+	eventAdapter := rest.NewEventHandler(eventService)
+	realmAdapter := rest.NewRealmHandler(realmService)
 	router := mux.NewRouter()
-	router.HandleFunc("/admin/realms", adapter.JWTAuth(httpAdapter.GetAllRealms()))
-	router.HandleFunc("/events", httpAdapter.GetAllEvents())
+	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.GetAllRealms())).Methods("GET")
+	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.CreateRealm())).Methods("POST")
+	router.HandleFunc("/events", eventAdapter.GetAllEvents()).Methods("GET")
+	router.HandleFunc("/events", eventAdapter.CreateEvent()).Methods("POST")
 	log.Fatal(http.ListenAndServe(":8000", router))
 }

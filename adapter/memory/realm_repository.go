@@ -20,8 +20,14 @@ func (m *RealmRepository) All() []domain.Realm {
 }
 
 func (m *RealmRepository) CreateOrUpdate(realm domain.Realm) domain.Realm {
-	realm.Id = m.id
-	m.realms[m.id] = realm
+	maxID := 1
+	for k, _ := range m.realms {
+		if k > maxID {
+			maxID = k
+		}
+	}
+	realm.Id = maxID + 1
+	m.realms[realm.Id] = realm
 	m.id++
 	return realm
 }

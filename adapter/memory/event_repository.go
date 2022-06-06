@@ -19,11 +19,11 @@ func (m *EventRepository) All() []domain.Event {
 	return sessions
 }
 
-func (m *EventRepository) CreateOrUpdate(session domain.Event) domain.Event {
-	session.Id = m.id
-	m.sessions[m.id] = session
+func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {
+	event.Id = m.id
+	m.sessions[m.id] = event
 	m.id++
-	return session
+	return event
 }
 
 func (m *EventRepository) Get(id int) domain.Event {
