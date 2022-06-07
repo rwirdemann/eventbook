@@ -3,6 +3,7 @@ package main
 import (
 	"eventbook/adapter/memory"
 	"eventbook/adapter/rest"
+	"eventbook/adapter/sql"
 	"eventbook/core/domain"
 	"eventbook/core/services"
 	"github.com/gorilla/mux"
@@ -17,8 +18,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	eventService := services.NewEventService(memory.NewEventRepository())
-
+	eventService := services.NewEventService(sql.NewEventRepository())
 	realmService := services.NewRealmService(memory.NewRealmRepository())
 	realmService.Create(domain.Realm{Name: "Wingbuddies"})
 	realmService.Create(domain.Realm{Name: "Bikebuddies"})
