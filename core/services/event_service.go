@@ -18,5 +18,9 @@ func (s EventService) Create(event domain.Event) domain.Event {
 }
 
 func (s EventService) All() []domain.Event {
-	return s.eventRepository.All()
+	events := s.eventRepository.All()
+	if events == nil {
+		return []domain.Event{}
+	}
+	return events
 }
