@@ -40,7 +40,11 @@ func (m *EventRepository) All() []domain.Event {
 }
 
 func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {
-	return domain.Event{}
+	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date) values($1, $2, $3)", event.Name, event.Location, event.Date)
+	if err != nil {
+		panic(err)
+	}
+	return event
 }
 
 func (m *EventRepository) Get(id int) domain.Event {
