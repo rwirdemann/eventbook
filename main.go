@@ -30,6 +30,7 @@ func main() {
 	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.CreateRealm())).Methods("POST")
 	router.HandleFunc("/events", eventAdapter.GetAllEvents()).Methods("GET")
 	router.HandleFunc("/events", eventAdapter.CreateEvent()).Methods("POST")
+	router.HandleFunc("/events/{id}", eventAdapter.DeleteEvent()).Methods("DELETE")
 
 	router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		tpl, _ := route.GetPathTemplate()

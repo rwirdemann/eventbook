@@ -24,7 +24,7 @@ func NewEventRepository() *EventRepository {
 
 func (m *EventRepository) All() []domain.Event {
 	var events []domain.Event
-	rows, _ := m.connection.Query(context.Background(), "select * from events")
+	rows, _ := m.connection.Query(context.Background(), "select * from events order by date desc")
 	for rows.Next() {
 		var id int
 		var name string
@@ -49,4 +49,11 @@ func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {
 
 func (m *EventRepository) Get(id int) domain.Event {
 	return domain.Event{}
+}
+
+func (m *EventRepository) Delete(id int) {
+	_, err := m.connection.Exec(context.Background(), "delete from events where id=$1", id)
+	if err != nil {
+		panic(err)
+	}
 }

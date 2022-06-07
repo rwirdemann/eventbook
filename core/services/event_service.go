@@ -24,3 +24,7 @@ func (s EventService) All() []domain.Event {
 	}
 	return events
 }
+
+func (s EventService) Delete(id int) {
+	s.eventRepository.Delete(id)
+}

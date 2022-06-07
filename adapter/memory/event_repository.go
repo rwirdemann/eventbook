@@ -29,3 +29,6 @@ func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {
 func (m *EventRepository) Get(id int) domain.Event {
 	return m.sessions[id]
 }
+
+func (m *EventRepository) Delete(id int) {
+}

@@ -6,8 +6,10 @@ import (
 	"eventbook/core/ports"
 	"eventbook/core/services"
 	"fmt"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type EventHandler struct {
@@ -50,5 +52,14 @@ func (h EventHandler) CreateEvent() http.HandlerFunc {
 		} else {
 			writer.WriteHeader(http.StatusBadRequest)
 		}
+	}
+}
+
+func (h EventHandler) DeleteEvent() func(http.ResponseWriter, *http.Request) {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		params := mux.Vars(request)
+		id, _ := strconv.Atoi(params["id"])
+		h.eventService.Delete(id)
+		writer.WriteHeader(http.StatusOK)
 	}
 }
