@@ -30,5 +30,12 @@ func main() {
 	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.CreateRealm())).Methods("POST")
 	router.HandleFunc("/events", eventAdapter.GetAllEvents()).Methods("GET")
 	router.HandleFunc("/events", eventAdapter.CreateEvent()).Methods("POST")
+
+	router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		tpl, _ := route.GetPathTemplate()
+		met, _ := route.GetMethods()
+		log.Println(tpl, met)
+		return nil
+	})
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
