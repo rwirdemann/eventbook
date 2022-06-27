@@ -19,18 +19,21 @@ func main() {
 	}
 
 	eventService := services.NewEventService(sql.NewEventRepository())
+	locationService := services.NewLocationService(sql.NewLocationRepository())
 	realmService := services.NewRealmService(memory.NewRealmRepository())
 	realmService.Create(domain.Realm{Name: "Wingbuddies"})
 	realmService.Create(domain.Realm{Name: "Bikebuddies"})
 
 	eventAdapter := rest.NewEventHandler(eventService)
 	realmAdapter := rest.NewRealmHandler(realmService)
+	locationAdapter := rest.NewLocationHandler(locationService)
 	router := mux.NewRouter()
 	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.GetAllRealms())).Methods("GET")
 	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.CreateRealm())).Methods("POST")
 	router.HandleFunc("/events", eventAdapter.GetAllEvents()).Methods("GET")
 	router.HandleFunc("/events", eventAdapter.CreateEvent()).Methods("POST")
 	router.HandleFunc("/events/{id}", eventAdapter.DeleteEvent()).Methods("DELETE")
+	router.HandleFunc("/locations", locationAdapter.GetAllLocations()).Methods("GET")
 
 	router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		tpl, _ := route.GetPathTemplate()

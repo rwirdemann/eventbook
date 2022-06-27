@@ -6,4 +6,23 @@ CREATE TABLE events
     date     TIMESTAMP    NOT NULL
 );
 
-insert into events(location, name, date) values ('Heiligenhafen', 'Wingsurfing', '2017-03-14')
+insert into events(location, name, date)
+values ('Heiligenhafen', 'Wingsurfing', '2017-03-14')
+
+CREATE TABLE locations
+(
+    id   serial PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+insert into locations(name) values ('Altenteil');
+insert into locations(name) values ('Heiligenhafen');
+insert into locations(name) values ('Hvide Sande');
+insert into locations(name) values ('Nørre Voropør');
+insert into locations(name) values ('Gammelmark');
+insert into locations(name) values ('Grossenbrode');
+insert into locations(name) values ('Klitmøller');
+insert into locations(name) values ('Hanstholm');
+insert into locations(name) values ('El Medano');
+insert into locations(name) values ('Kellenhusen');
+

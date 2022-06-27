@@ -6,6 +6,16 @@ Eventbook is a REST API for event management. Events can be of any kind, e.g. sp
 
 <img src="images/core-domain.jpg" width="500" alt="core domain">
 
+## Build and deploy
+
+```
+GOOS=linux GOARCH=amd64 go build -o bin/app-amd64-linux main.go
+scp bin/app-amd64-linux root@95.217.180.178:~
+ssh root@95.217.180.178
+nohup ./app-amd64-linux &
+```
+
+
 ## API
 
 ### Authentication
