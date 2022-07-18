@@ -2,6 +2,7 @@ package sql
 
 import (
 	"context"
+	"database/sql"
 	"eventbook/core/domain"
 	"fmt"
 	"github.com/jackc/pgx/v4"
@@ -30,17 +31,26 @@ func (m *EventRepository) All() []domain.Event {
 		var name string
 		var location string
 		var date time.Time
-		err := rows.Scan(&id, &location, &name, &date)
+		var distance sql.NullInt32
+		err := rows.Scan(&id, &location, &name, &date, &distance)
 		if err != nil {
 			panic(err)
 		}
-		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date})
+
+		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date, Distance: toInt32(distance)})
 	}
 	return events
 }
 
+func toInt32(v sql.NullInt32) int32 {
+	if v.Valid {
+		return v.Int32
+	}
+	return 0
+}
+
 func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {
-	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date) values($1, $2, $3)", event.Name, event.Location, event.Date)
+	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date, distance) values($1, $2, $3, $4)", event.Name, event.Location, event.Date, event.Distance)
 	if err != nil {
 		panic(err)
 	}

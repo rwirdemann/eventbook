@@ -26,3 +26,6 @@ insert into locations(name) values ('Hanstholm');
 insert into locations(name) values ('El Medano');
 insert into locations(name) values ('Kellenhusen');
 
+alter table events add column distance integer;
+
+select * from events;
