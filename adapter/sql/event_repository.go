@@ -31,22 +31,22 @@ func (m *EventRepository) All() []domain.Event {
 		var name string
 		var location string
 		var date time.Time
-		var distance sql.NullInt32
+		var distance sql.NullFloat64
 		err := rows.Scan(&id, &location, &name, &date, &distance)
 		if err != nil {
 			panic(err)
 		}
 
-		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date, Distance: toInt32(distance)})
+		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date, Distance: toFloat64(distance)})
 	}
 	return events
 }
 
-func toInt32(v sql.NullInt32) int32 {
+func toFloat64(v sql.NullFloat64) float64 {
 	if v.Valid {
-		return v.Int32
+		return v.Float64
 	}
-	return 0
+	return 0.0
 }
 
 func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {

@@ -28,4 +28,7 @@ insert into locations(name) values ('Kellenhusen');
 
 alter table events add column distance integer;
 
+alter table events drop column distance;
+alter table events add column distance double precision;
+
 select * from events;
