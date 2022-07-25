@@ -55,6 +55,25 @@ func (h EventHandler) CreateEvent() http.HandlerFunc {
 	}
 }
 
+func (h EventHandler) UpdateEvent() http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		params := mux.Vars(request)
+		id, _ := strconv.Atoi(params["id"])
+		if b, err := ioutil.ReadAll(request.Body); err == nil {
+			if len(b) == 0 {
+				writer.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			var event domain.Event
+			_ = json.Unmarshal(b, &event)
+			h.eventService.Update(id, event)
+			writer.WriteHeader(http.StatusNoContent)
+		} else {
+			writer.WriteHeader(http.StatusBadRequest)
+		}
+	}
+}
+
 func (h EventHandler) DeleteEvent() func(http.ResponseWriter, *http.Request) {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		params := mux.Vars(request)

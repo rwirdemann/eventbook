@@ -57,6 +57,14 @@ func (m *EventRepository) Create(event domain.Event) domain.Event {
 	return event
 }
 
+func (m *EventRepository) Update(id int, event domain.Event) domain.Event {
+	_, err := m.connection.Exec(context.Background(), "update events set name=$1, location=$2, date=$3, distance=$4 where id = $5", event.Name, event.Location, event.Date, event.Distance, id)
+	if err != nil {
+		panic(err)
+	}
+	return event
+}
+
 func (m *EventRepository) Get(id int) domain.Event {
 	return domain.Event{}
 }

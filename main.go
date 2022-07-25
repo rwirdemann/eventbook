@@ -32,6 +32,7 @@ func main() {
 	router.HandleFunc("/admin/realms", rest.JWTAuth(realmAdapter.CreateRealm())).Methods("POST")
 	router.HandleFunc("/events", eventAdapter.GetAllEvents()).Methods("GET")
 	router.HandleFunc("/events", eventAdapter.CreateEvent()).Methods("POST")
+	router.HandleFunc("/events/{id}", eventAdapter.UpdateEvent()).Methods("PUT")
 	router.HandleFunc("/events/{id}", eventAdapter.DeleteEvent()).Methods("DELETE")
 	router.HandleFunc("/locations", locationAdapter.GetAllLocations()).Methods("GET")
 
