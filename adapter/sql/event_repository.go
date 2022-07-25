@@ -49,7 +49,7 @@ func toFloat64(v sql.NullFloat64) float64 {
 	return 0.0
 }
 
-func (m *EventRepository) CreateOrUpdate(event domain.Event) domain.Event {
+func (m *EventRepository) Create(event domain.Event) domain.Event {
 	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date, distance) values($1, $2, $3, $4)", event.Name, event.Location, event.Date, event.Distance)
 	if err != nil {
 		panic(err)

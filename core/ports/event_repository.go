@@ -5,7 +5,7 @@ import (
 )
 
 type EventRepository interface {
-	CreateOrUpdate(session domain.Event) domain.Event
+	Create(session domain.Event) domain.Event
 	All() []domain.Event
 	Get(id int) domain.Event
 	Delete(id int)

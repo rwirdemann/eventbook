@@ -14,7 +14,7 @@ func NewEventService(eventRepository ports.EventRepository) EventService {
 }
 
 func (s EventService) Create(event domain.Event) domain.Event {
-	return s.eventRepository.CreateOrUpdate(event)
+	return s.eventRepository.Create(event)
 }
 
 func (s EventService) All() []domain.Event {
