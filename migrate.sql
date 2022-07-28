@@ -31,4 +31,6 @@ alter table events add column distance integer;
 alter table events drop column distance;
 alter table events add column distance double precision;
 
+alter table events add column maxspeed double precision;
+
 select * from events;

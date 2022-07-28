@@ -32,12 +32,13 @@ func (m *EventRepository) All() []domain.Event {
 		var location string
 		var date time.Time
 		var distance sql.NullFloat64
-		err := rows.Scan(&id, &location, &name, &date, &distance)
+		var maxSpeed sql.NullFloat64
+		err := rows.Scan(&id, &location, &name, &date, &distance, &maxSpeed)
 		if err != nil {
 			panic(err)
 		}
 
-		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date, Distance: toFloat64(distance)})
+		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date, Distance: toFloat64(distance), MaxSpeed: toFloat64(maxSpeed)})
 	}
 	return events
 }
@@ -50,7 +51,8 @@ func toFloat64(v sql.NullFloat64) float64 {
 }
 
 func (m *EventRepository) Create(event domain.Event) domain.Event {
-	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date, distance) values($1, $2, $3, $4)", event.Name, event.Location, event.Date, event.Distance)
+	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date, distance, maxspeed) values($1, $2, $3, $4, $5)",
+		event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed)
 	if err != nil {
 		panic(err)
 	}
@@ -58,7 +60,8 @@ func (m *EventRepository) Create(event domain.Event) domain.Event {
 }
 
 func (m *EventRepository) Update(id int, event domain.Event) domain.Event {
-	_, err := m.connection.Exec(context.Background(), "update events set name=$1, location=$2, date=$3, distance=$4 where id = $5", event.Name, event.Location, event.Date, event.Distance, id)
+	_, err := m.connection.Exec(context.Background(), "update events set name=$1, location=$2, date=$3, distance=$4, maxspeed=$5where id = $6",
+		event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, id)
 	if err != nil {
 		panic(err)
 	}
