@@ -18,7 +18,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	eventService := services.NewEventService(sql.NewEventRepository())
+	eventService := services.NewEventService(sql.NewEventRepository(), sql.NewLocationRepository())
 	locationService := services.NewLocationService(sql.NewLocationRepository())
 	realmService := services.NewRealmService(memory.NewRealmRepository())
 	realmService.Create(domain.Realm{Name: "Wingbuddies"})

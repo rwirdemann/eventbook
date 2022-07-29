@@ -35,3 +35,23 @@ func (m *LocationRepository) All() []domain.Location {
 	}
 	return locations
 }
+
+func (m *LocationRepository) FindByName(name string) (domain.Location, bool) {
+	rows, _ := m.connection.Query(context.Background(), "select * from locations where name = $1", name)
+	if rows.Next() {
+		var l domain.Location
+		err := rows.Scan(&l.Id, &l.Name)
+		if err != nil {
+			panic(err)
+		}
+		return l, true
+	}
+	return domain.Location{}, false
+}
+
+func (m *LocationRepository) Create(location domain.Location) {
+	_, err := m.connection.Exec(context.Background(), "insert into locations(name) values($1)", location.Name)
+	if err != nil {
+		panic(err)
+	}
+}
