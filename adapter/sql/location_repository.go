@@ -38,6 +38,7 @@ func (m *LocationRepository) All() []domain.Location {
 
 func (m *LocationRepository) FindByName(name string) (domain.Location, bool) {
 	rows, _ := m.connection.Query(context.Background(), "select * from locations where name = $1", name)
+	defer rows.Close()
 	if rows.Next() {
 		var l domain.Location
 		err := rows.Scan(&l.Id, &l.Name)
