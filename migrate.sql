@@ -32,6 +32,7 @@ alter table events drop column distance;
 alter table events add column distance double precision;
 
 alter table events add column maxspeed double precision;
+alter table events add column duration double precision;
 
 select * from events;
 select * from locations;

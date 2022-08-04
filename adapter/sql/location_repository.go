@@ -24,6 +24,7 @@ func NewLocationRepository() *LocationRepository {
 func (m *LocationRepository) All() []domain.Location {
 	var locations []domain.Location
 	rows, _ := m.connection.Query(context.Background(), "select * from locations order by name")
+	defer rows.Close()
 	for rows.Next() {
 		var id int
 		var name string

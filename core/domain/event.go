@@ -9,4 +9,5 @@ type Event struct {
 	Distance float64   `json:"distance"`
 	Date     time.Time `json:"date"`
 	MaxSpeed float64   `json:"maxspeed"`
+	Duration float64   `json:"duration"`
 }
