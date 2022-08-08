@@ -57,3 +57,10 @@ func (m *LocationRepository) Create(location domain.Location) {
 		panic(err)
 	}
 }
+
+func (m *LocationRepository) Delete(id int) {
+	_, err := m.connection.Exec(context.Background(), "delete from locations where id=$1", id)
+	if err != nil {
+		panic(err)
+	}
+}

@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"eventbook/core/ports"
 	"eventbook/core/services"
+	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 )
 
 type LocationHandler struct {
@@ -28,5 +30,14 @@ func (h LocationHandler) GetAllLocations() http.HandlerFunc {
 			writer.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+	}
+}
+
+func (h LocationHandler) DeleteLocation() func(http.ResponseWriter, *http.Request) {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		params := mux.Vars(request)
+		id, _ := strconv.Atoi(params["id"])
+		h.locationService.Delete(id)
+		writer.WriteHeader(http.StatusOK)
 	}
 }

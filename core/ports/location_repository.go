@@ -8,4 +8,5 @@ type LocationRepository interface {
 	All() []domain.Location
 	FindByName(name string) (domain.Location, bool)
 	Create(location domain.Location)
+	Delete(id int)
 }

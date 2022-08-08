@@ -35,6 +35,7 @@ func main() {
 	router.HandleFunc("/events/{id}", eventAdapter.UpdateEvent()).Methods("PUT")
 	router.HandleFunc("/events/{id}", eventAdapter.DeleteEvent()).Methods("DELETE")
 	router.HandleFunc("/locations", locationAdapter.GetAllLocations()).Methods("GET")
+	router.HandleFunc("/locations/{id}", locationAdapter.DeleteLocation()).Methods("DELETE")
 
 	router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		tpl, _ := route.GetPathTemplate()

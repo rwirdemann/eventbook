@@ -20,3 +20,7 @@ func (s LocationService) All() []domain.Location {
 	}
 	return locations
 }
+
+func (s LocationService) Delete(id int) {
+	s.locationRepository.Delete(id)
+}
