@@ -20,8 +20,13 @@ func NewEventHandler(eventService services.EventService) *EventHandler {
 	return &EventHandler{eventService: eventService}
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func (h EventHandler) GetAllEvents() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
+		enableCors(&writer)
 		bytes, err := json.Marshal(h.eventService.All())
 		if err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)

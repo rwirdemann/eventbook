@@ -54,11 +54,17 @@ func toFloat64(v sql.NullFloat64) float64 {
 }
 
 func (m *EventRepository) Create(event domain.Event) domain.Event {
-	_, err := m.connection.Exec(context.Background(), "insert into events(name, location, date, distance, maxspeed, duration) values($1, $2, $3, $4, $5, $6)",
-		event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, event.Duration)
+	sqlStatement := `
+		INSERT INTO events (name, location, date, distance, maxspeed, duration)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id`
+	id := 0
+	err := m.connection.QueryRow(context.Background(),
+		sqlStatement, event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, event.Duration).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
+	event.Id = id
 	return event
 }
 
