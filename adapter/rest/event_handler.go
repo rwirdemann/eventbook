@@ -81,6 +81,7 @@ func (h EventHandler) UpdateEvent() http.HandlerFunc {
 
 func (h EventHandler) DeleteEvent() func(http.ResponseWriter, *http.Request) {
 	return func(writer http.ResponseWriter, request *http.Request) {
+		enableCors(&writer)
 		params := mux.Vars(request)
 		id, _ := strconv.Atoi(params["id"])
 		h.eventService.Delete(id)
