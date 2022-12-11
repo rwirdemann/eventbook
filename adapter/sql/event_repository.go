@@ -35,13 +35,14 @@ func (m *EventRepository) All() []domain.Event {
 		var distance sql.NullFloat64
 		var maxSpeed sql.NullFloat64
 		var duration sql.NullFloat64
-		err := rows.Scan(&id, &location, &name, &date, &distance, &maxSpeed, &duration)
+		var locationId sql.NullInt32
+		err := rows.Scan(&id, &location, &name, &date, &distance, &maxSpeed, &duration, &locationId)
 		if err != nil {
 			panic(err)
 		}
 
 		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date,
-			Distance: toFloat64(distance), MaxSpeed: toFloat64(maxSpeed), Duration: toFloat64(duration)})
+			Distance: toFloat64(distance), MaxSpeed: toFloat64(maxSpeed), Duration: toFloat64(duration), LocationId: toInt32(locationId)})
 	}
 	return events
 }
@@ -53,14 +54,21 @@ func toFloat64(v sql.NullFloat64) float64 {
 	return 0.0
 }
 
+func toInt32(v sql.NullInt32) int32 {
+	if v.Valid {
+		return v.Int32
+	}
+	return 0
+}
+
 func (m *EventRepository) Create(event domain.Event) domain.Event {
 	sqlStatement := `
-		INSERT INTO events (name, location, date, distance, maxspeed, duration)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO events (name, location, date, distance, maxspeed, duration, location_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id`
 	id := 0
 	err := m.connection.QueryRow(context.Background(),
-		sqlStatement, event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, event.Duration).Scan(&id)
+		sqlStatement, event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, event.Duration, event.LocationId).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
@@ -69,8 +77,8 @@ func (m *EventRepository) Create(event domain.Event) domain.Event {
 }
 
 func (m *EventRepository) Update(id int, event domain.Event) domain.Event {
-	_, err := m.connection.Exec(context.Background(), "update events set name=$1, location=$2, date=$3, distance=$4, maxspeed=$5, duration=$6 where id = $7",
-		event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, event.Duration, id)
+	_, err := m.connection.Exec(context.Background(), "update events set name=$1, location=$2, date=$3, distance=$4, maxspeed=$5, duration=$6, location_id=$7 where id = $8",
+		event.Name, event.Location, event.Date, event.Distance, event.MaxSpeed, event.Duration, event.LocationId, id)
 	if err != nil {
 		panic(err)
 	}

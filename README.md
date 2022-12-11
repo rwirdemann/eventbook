@@ -15,7 +15,6 @@ ssh root@95.217.180.178
 nohup ./app-amd64-linux &
 ```
 
-
 ## API
 
 ### Authentication

@@ -7,6 +7,6 @@ import (
 type LocationRepository interface {
 	All() []domain.Location
 	FindByName(name string) (domain.Location, bool)
-	Create(location domain.Location)
+	Create(location domain.Location) domain.Location
 	Delete(id int)
 }

@@ -16,12 +16,6 @@ func NewEventService(eventRepository ports.EventRepository, locationRepository p
 
 func (s EventService) Create(event domain.Event) domain.Event {
 	e := s.eventRepository.Create(event)
-	_, exists := s.locationRepository.FindByName(e.Location)
-	if !exists {
-		s.locationRepository.Create(domain.Location{
-			Name: e.Location,
-		})
-	}
 	return e
 }
 

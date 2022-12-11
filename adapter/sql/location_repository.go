@@ -51,11 +51,16 @@ func (m *LocationRepository) FindByName(name string) (domain.Location, bool) {
 	return domain.Location{}, false
 }
 
-func (m *LocationRepository) Create(location domain.Location) {
-	_, err := m.connection.Exec(context.Background(), "insert into locations(name) values($1)", location.Name)
+func (m *LocationRepository) Create(location domain.Location) domain.Location {
+	sqlStatement := "insert into locations(name) values($1) returning id"
+	id := 0
+	err := m.connection.QueryRow(context.Background(),
+		sqlStatement, location.Name).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
+	location.Id = id
+	return location
 }
 
 func (m *LocationRepository) Delete(id int) {
