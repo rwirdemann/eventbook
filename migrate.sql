@@ -38,3 +38,5 @@ alter table events add column location_id integer;
 
 select * from events;
 select * from locations;
+
+alter table events drop column location;

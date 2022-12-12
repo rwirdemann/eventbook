@@ -25,7 +25,8 @@ func NewEventRepository() *EventRepository {
 
 func (m *EventRepository) All() []domain.Event {
 	var events []domain.Event
-	rows, _ := m.connection.Query(context.Background(), "select * from events order by date desc")
+	rows, _ := m.connection.Query(context.Background(),
+		"select events.id, events.name, events.date, events.distance, events.maxspeed, events.duration, locations.id, locations.name from events join locations on location_id = locations.id order by events.date desc")
 	defer rows.Close()
 	for rows.Next() {
 		var id int
@@ -36,13 +37,14 @@ func (m *EventRepository) All() []domain.Event {
 		var maxSpeed sql.NullFloat64
 		var duration sql.NullFloat64
 		var locationId sql.NullInt32
-		err := rows.Scan(&id, &location, &name, &date, &distance, &maxSpeed, &duration, &locationId)
+
+		err := rows.Scan(&id, &name, &date, &distance, &maxSpeed, &duration, &locationId, &location)
 		if err != nil {
 			panic(err)
 		}
 
-		events = append(events, domain.Event{Id: id, Name: name, Location: location, Date: date,
-			Distance: toFloat64(distance), MaxSpeed: toFloat64(maxSpeed), Duration: toFloat64(duration), LocationId: toInt32(locationId)})
+		events = append(events, domain.Event{Id: id, Name: name, Date: date, Distance: toFloat64(distance),
+			MaxSpeed: toFloat64(maxSpeed), Duration: toFloat64(duration), LocationId: toInt32(locationId), Location: location})
 	}
 	return events
 }
